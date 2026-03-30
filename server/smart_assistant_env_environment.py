@@ -1,10 +1,11 @@
-from openenv.core.env_server import Environment
+from openenv_core.env_server import Environment
 from models import AssistantObservation, AssistantAction, AssistantState, Email
 
 
 class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
+        super().__init__()   # important for base class
         self.reset()
 
     def reset(self):
