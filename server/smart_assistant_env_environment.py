@@ -1,13 +1,15 @@
 from openenv.core.env_server import Environment
-from models import AssistantObservation, AssistantAction, AssistantState
+from models import AssistantObservation, AssistantAction, AssistantState, Email
 
 
 class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
-        self.reset()
+        super().__init__()
+        self.state = None
 
-    def reset(self):
+    # 🔁 RESET
+    def reset(self) -> AssistantObservation:
         self.state = AssistantState(
             step_count=0,
             completed_tasks=0
@@ -15,8 +17,8 @@ class SmartAssistantEnvironment(Environment):
 
         observation = AssistantObservation(
             inbox=[
-                {"id": 1, "priority": "high", "requires_reply": True},
-                {"id": 2, "priority": "low", "requires_reply": False}
+                Email(id=1, priority="high", requires_reply=True),
+                Email(id=2, priority="low", requires_reply=False),
             ],
             meetings=[],
             time="09:00",
@@ -25,20 +27,29 @@ class SmartAssistantEnvironment(Environment):
 
         return observation
 
+    # ⚡ STEP
     def step(self, action: AssistantAction):
-        reward = 0
+        reward = 0.0
 
-        if action.action_type == "reply_email" and action.email_id == 1:
-            reward += 3
-            self.state.completed_tasks += 1
+        # Validate action
+        if action.action_type == "reply_email":
+            if action.email_id == 1:
+                reward = 3.0
+                self.state.completed_tasks += 1
+            else:
+                reward = -1.0
 
         elif action.action_type == "schedule_meeting":
-            reward += 4
-            self.state.completed_tasks += 1
+            if action.meeting_time:
+                reward = 4.0
+                self.state.completed_tasks += 1
+            else:
+                reward = -1.0
 
         else:
-            reward -= 1
+            reward = -1.0
 
+        # update state
         self.state.step_count += 1
 
         done = self.state.completed_tasks >= 2
@@ -52,5 +63,6 @@ class SmartAssistantEnvironment(Environment):
 
         return observation, reward, done, {}
 
-    def get_state(self):
+    # 📊 STATE
+    def get_state(self) -> AssistantState:
         return self.state

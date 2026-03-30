@@ -1,3 +1,12 @@
+---
+title: Smart Assistant Env
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: server/app.py
+pinned: false
+---
 # 🚀 Smart Assistant OpenEnv Environment
 
 A real-world reinforcement learning environment where an AI agent learns to manage emails and schedule meetings efficiently.
