@@ -1,12 +1,11 @@
 from openenv.core.env_server import Environment
-from server.models import AssistantObservation, AssistantAction, AssistantState, Email
+from models import AssistantObservation, AssistantAction, AssistantState, Email
 
 
 class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
-        super().__init__()
-        self.state = None
+        self.reset()
 
     def reset(self):
         self.state = AssistantState(
@@ -14,7 +13,7 @@ class SmartAssistantEnvironment(Environment):
             completed_tasks=0
         )
 
-        return AssistantObservation(
+        observation = AssistantObservation(
             inbox=[
                 Email(id=1, priority="high", requires_reply=True),
                 Email(id=2, priority="low", requires_reply=False)
@@ -24,34 +23,34 @@ class SmartAssistantEnvironment(Environment):
             done=False
         )
 
+        return observation
+
     def step(self, action: AssistantAction):
-        reward = 0.0
+        reward = 0
 
         if action.action_type == "reply_email" and action.email_id == 1:
-            reward = 3.0
+            reward += 3
             self.state.completed_tasks += 1
 
         elif action.action_type == "schedule_meeting":
-            reward = 4.0
+            reward += 4
             self.state.completed_tasks += 1
 
         else:
-            reward = -1.0
+            reward -= 1
 
         self.state.step_count += 1
+
         done = self.state.completed_tasks >= 2
 
-        return (
-            AssistantObservation(
-                inbox=[],
-                meetings=["10:00"],
-                time="10:00",
-                done=done
-            ),
-            reward,
-            done,
-            {}
+        observation = AssistantObservation(
+            inbox=[],
+            meetings=["10:00"],
+            time="10:00",
+            done=done
         )
+
+        return observation, reward, done, {}
 
     def get_state(self):
         return self.state
