@@ -1,5 +1,5 @@
 from openenv.core.env_server import Environment
-from models import AssistantObservation, AssistantAction, AssistantState, Email
+from models import AssistantObservation, AssistantAction, AssistantState
 
 
 class SmartAssistantEnvironment(Environment):
@@ -8,53 +8,49 @@ class SmartAssistantEnvironment(Environment):
         self.reset()
 
     def reset(self):
-        self.state = AssistantState()
-        self.inbox = [
-            Email(id=1, priority="high", requires_reply=True),
-            Email(id=2, priority="low", requires_reply=False)
-        ]
-        self.meetings = []
-        self.time = "09:00"
-        self.done = False
-
-        return AssistantObservation(
-            inbox=self.inbox,
-            meetings=self.meetings,
-            time=self.time,
-            done=self.done
+        self.state = AssistantState(
+            step_count=0,
+            completed_tasks=0
         )
+
+        observation = AssistantObservation(
+            inbox=[
+                {"id": 1, "priority": "high", "requires_reply": True},
+                {"id": 2, "priority": "low", "requires_reply": False}
+            ],
+            meetings=[],
+            time="09:00",
+            done=False
+        )
+
+        return observation
 
     def step(self, action: AssistantAction):
         reward = 0
 
-        if action.action_type == "reply_email":
-            for email in self.inbox:
-                if email.id == action.email_id and email.requires_reply:
-                    reward += 3
-                    self.state.completed_tasks += 1
+        if action.action_type == "reply_email" and action.email_id == 1:
+            reward += 3
+            self.state.completed_tasks += 1
 
         elif action.action_type == "schedule_meeting":
-            if action.meeting_time:
-                self.meetings.append(action.meeting_time)
-                reward += 4
-                self.state.completed_tasks += 1
+            reward += 4
+            self.state.completed_tasks += 1
 
         else:
             reward -= 1
 
         self.state.step_count += 1
 
-        if self.state.completed_tasks >= 2:
-            self.done = True
-            reward += 5
+        done = self.state.completed_tasks >= 2
 
-        return AssistantObservation(
-            inbox=self.inbox,
-            meetings=self.meetings,
-            time=self.time,
-            done=self.done,
-            reward=reward
+        observation = AssistantObservation(
+            inbox=[],
+            meetings=["10:00"],
+            time="10:00",
+            done=done
         )
+
+        return observation, reward, done, {}
 
     def get_state(self):
         return self.state

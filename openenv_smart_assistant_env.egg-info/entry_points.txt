@@ -1,2 +1,0 @@
-[console_scripts]
-server = smart_assistant_env.server.app:main
