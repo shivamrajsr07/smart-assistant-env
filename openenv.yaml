@@ -1,0 +1,15 @@
+name: smart_assistant_env
+description: AI assistant for managing emails and meetings
+
+actions:
+  action_type: string
+  email_id: int
+  reply_text: string
+  meeting_time: string
+
+observations:
+  inbox: list
+  meetings: list
+  time: string
+  done: boolean
+  reward: float
