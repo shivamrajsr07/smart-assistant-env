@@ -1,4 +1,4 @@
-from openenv.core.env_server import Environment
+from openenv.env import Environment
 from models import AssistantObservation, AssistantAction, AssistantState, Email
 
 
