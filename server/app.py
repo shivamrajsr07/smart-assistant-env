@@ -1,4 +1,4 @@
-from openenv.env_server.http_server import create_app
+from openenv_core.env_server.http_server import create_app
 from models import AssistantAction, AssistantObservation
 from server.smart_assistant_env_environment import SmartAssistantEnvironment
 

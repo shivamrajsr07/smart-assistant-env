@@ -1,5 +1,5 @@
+openenv-core
 fastapi
 uvicorn
 pydantic
-openenv
 requests
