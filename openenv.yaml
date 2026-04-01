@@ -1,15 +1,14 @@
 name: smart-assistant-env
-description: Simple assistant environment
-
-actions:
-  - action_type: string
-  - email_id: int
 
 observation:
   inbox: list
   meetings: list
   time: string
   done: boolean
+
+action:
+  action_type: string
+  email_id: int
 
 state:
   step_count: int

@@ -6,19 +6,19 @@ class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
         super().__init__()
-        self.reset()
+        self._state = AssistantState(step_count=0, completed_tasks=0)
 
     def reset(self):
-        self.state = AssistantState(step_count=0, completed_tasks=0)
+        self._state = AssistantState(step_count=0, completed_tasks=0)
 
         return AssistantObservation(
             inbox=[
                 Email(id=1, priority="high", requires_reply=True),
-                Email(id=2, priority="low", requires_reply=False)
+                Email(id=2, priority="low", requires_reply=False),
             ],
             meetings=[],
             time="09:00",
-            done=False
+            done=False,
         )
 
     def step(self, action: AssistantAction):
@@ -26,29 +26,27 @@ class SmartAssistantEnvironment(Environment):
 
         if action.action_type == "reply_email" and action.email_id == 1:
             reward = 1.0
-            self.state.completed_tasks += 1
+            self._state.completed_tasks += 1
 
         elif action.action_type == "schedule_meeting":
             reward = 1.0
-            self.state.completed_tasks += 1
+            self._state.completed_tasks += 1
 
-        else:
-            reward = 0.0
-
-        self.state.step_count += 1
-        done = self.state.completed_tasks >= 2
+        self._state.step_count += 1
+        done = self._state.completed_tasks >= 2
 
         return (
             AssistantObservation(
                 inbox=[],
                 meetings=["10:00"],
                 time="10:00",
-                done=done
+                done=done,
             ),
             reward,
             done,
-            {}
+            {},
         )
 
-    def get_state(self):
-        return self.state
+    # ✅ REQUIRED
+    def state(self) -> AssistantState:
+        return self._state
