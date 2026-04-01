@@ -1,5 +1,5 @@
 from openenv_core.env_server import Environment
-from models import AssistantObservation, AssistantAction, AssistantState, Email
+from models import AssistantState
 
 
 class SmartAssistantEnvironment(Environment):
@@ -11,24 +11,24 @@ class SmartAssistantEnvironment(Environment):
     def reset(self):
         self._state = AssistantState(step_count=0, completed_tasks=0)
 
-        return AssistantObservation(
-            inbox=[
-                Email(id=1, priority="high", requires_reply=True),
-                Email(id=2, priority="low", requires_reply=False),
+        return {
+            "inbox": [
+                {"id": 1, "priority": "high", "requires_reply": True},
+                {"id": 2, "priority": "low", "requires_reply": False},
             ],
-            meetings=[],
-            time="09:00",
-            done=False,
-        )
+            "meetings": [],
+            "time": "09:00",
+            "done": False,
+        }
 
-    def step(self, action: AssistantAction):
+    def step(self, action):
         reward = 0.0
 
-        if action.action_type == "reply_email" and action.email_id == 1:
+        if action.get("action_type") == "reply_email" and action.get("email_id") == 1:
             reward = 1.0
             self._state.completed_tasks += 1
 
-        elif action.action_type == "schedule_meeting":
+        elif action.get("action_type") == "schedule_meeting":
             reward = 1.0
             self._state.completed_tasks += 1
 
@@ -36,17 +36,16 @@ class SmartAssistantEnvironment(Environment):
         done = self._state.completed_tasks >= 2
 
         return (
-            AssistantObservation(
-                inbox=[],
-                meetings=["10:00"],
-                time="10:00",
-                done=done,
-            ),
+            {
+                "inbox": [],
+                "meetings": ["10:00"],
+                "time": "10:00",
+                "done": done,
+            },
             reward,
             done,
             {},
         )
 
-    # ✅ REQUIRED
-    def state(self) -> AssistantState:
-        return self._state
+    def state(self):
+        return self._state.dict()   # 🔥 ALSO IMPORTANT
