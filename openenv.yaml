@@ -1,15 +1,43 @@
 name: smart-assistant-env
 
-observation:
-  inbox: list
-  meetings: list
-  time: string
-  done: boolean
-
 action:
-  action_type: string
-  email_id: int
+  type: object
+  properties:
+    action_type:
+      type: string
+    email_id:
+      type: integer
+  required: [action_type]
+
+observation:
+  type: object
+  properties:
+    inbox:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          priority:
+            type: string
+          requires_reply:
+            type: boolean
+    meetings:
+      type: array
+      items:
+        type: string
+    time:
+      type: string
+    done:
+      type: boolean
+  required: [inbox, meetings, time, done]
 
 state:
-  step_count: int
-  completed_tasks: int
+  type: object
+  properties:
+    step_count:
+      type: integer
+    completed_tasks:
+      type: integer
+  required: [step_count, completed_tasks]
