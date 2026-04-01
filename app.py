@@ -3,7 +3,7 @@ from server.smart_assistant_env_environment import SmartAssistantEnvironment
 from models import AssistantAction, AssistantObservation
 
 app = create_app(
-    SmartAssistantEnvironment,   # ✅ PASS CLASS (NOT INSTANCE)
+    SmartAssistantEnvironment,   # ✅ class (NOT instance)
     AssistantAction,
     AssistantObservation,
 )

@@ -1,15 +1,21 @@
 from openenv_core.env_server import Environment
-from models import AssistantState
 
 
 class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
         super().__init__()
-        self._state = AssistantState(step_count=0, completed_tasks=0)
+        self._state = {
+            "step_count": 0,
+            "completed_tasks": 0
+        }
 
-    def reset(self):
-        self._state = AssistantState(step_count=0, completed_tasks=0)
+    # ✅ FIXED: accepts seed + episode_id
+    def reset(self, seed=None, episode_id=None, **kwargs):
+        self._state = {
+            "step_count": 0,
+            "completed_tasks": 0
+        }
 
         return {
             "inbox": [
@@ -26,14 +32,14 @@ class SmartAssistantEnvironment(Environment):
 
         if action.get("action_type") == "reply_email" and action.get("email_id") == 1:
             reward = 1.0
-            self._state.completed_tasks += 1
+            self._state["completed_tasks"] += 1
 
         elif action.get("action_type") == "schedule_meeting":
             reward = 1.0
-            self._state.completed_tasks += 1
+            self._state["completed_tasks"] += 1
 
-        self._state.step_count += 1
-        done = self._state.completed_tasks >= 2
+        self._state["step_count"] += 1
+        done = self._state["completed_tasks"] >= 2
 
         return (
             {
@@ -47,5 +53,6 @@ class SmartAssistantEnvironment(Environment):
             {},
         )
 
+    # ✅ REQUIRED
     def state(self):
-        return self._state.dict()   # 🔥 ALSO IMPORTANT
+        return self._state
