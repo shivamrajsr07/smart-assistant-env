@@ -8,7 +8,7 @@ class SmartAssistantEnvironment(Environment):
         super().__init__()
         self._state = AssistantState(step_count=0, completed_tasks=0)
 
-    # ✅ MUST accept seed + episode_id
+    # ✅ must accept seed, episode_id
     def reset(self, seed=None, episode_id=None, **kwargs):
         self._state = AssistantState(step_count=0, completed_tasks=0)
 
@@ -20,6 +20,7 @@ class SmartAssistantEnvironment(Environment):
             meetings=[],
             time="09:00",
             done=False,
+            reward=0.0   # 🔥 REQUIRED
         )
 
     def step(self, action: AssistantAction):
@@ -42,10 +43,11 @@ class SmartAssistantEnvironment(Environment):
                 meetings=["10:00"],
                 time="10:00",
                 done=done,
+                reward=reward   # 🔥 REQUIRED
             ),
             reward,
             done,
-            {},
+            {}
         )
 
     # ✅ REQUIRED

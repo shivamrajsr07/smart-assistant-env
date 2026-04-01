@@ -31,7 +31,9 @@ observation:
       type: string
     done:
       type: boolean
-  required: [inbox, meetings, time, done]
+    reward:
+      type: number
+  required: [inbox, meetings, time, done, reward]
 
 state:
   type: object

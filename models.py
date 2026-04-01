@@ -18,6 +18,7 @@ class AssistantObservation(BaseModel):
     meetings: List[str]
     time: str
     done: bool
+    reward: float   # 🔥 REQUIRED
 
 
 class AssistantAction(BaseModel):
