@@ -5,14 +5,11 @@ from models import AssistantObservation, AssistantAction, AssistantState, Email
 class SmartAssistantEnvironment(Environment):
 
     def __init__(self):
-        super().__init__()   # important for base class
+        super().__init__()
         self.reset()
 
     def reset(self):
-        self.state = AssistantState(
-            step_count=0,
-            completed_tasks=0
-        )
+        self.state = AssistantState(step_count=0, completed_tasks=0)
 
         return AssistantObservation(
             inbox=[
@@ -28,15 +25,15 @@ class SmartAssistantEnvironment(Environment):
         reward = 0.0
 
         if action.action_type == "reply_email" and action.email_id == 1:
-            reward = 3.0
+            reward = 1.0
             self.state.completed_tasks += 1
 
         elif action.action_type == "schedule_meeting":
-            reward = 4.0
+            reward = 1.0
             self.state.completed_tasks += 1
 
         else:
-            reward = -1.0
+            reward = 0.0
 
         self.state.step_count += 1
         done = self.state.completed_tasks >= 2

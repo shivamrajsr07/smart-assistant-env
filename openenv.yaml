@@ -1,15 +1,16 @@
-name: smart_assistant_env
-description: AI assistant for managing emails and meetings
+name: smart-assistant-env
+description: Simple assistant environment
 
 actions:
-  action_type: string
-  email_id: int
-  reply_text: string
-  meeting_time: string
+  - action_type: string
+  - email_id: int
 
-observations:
+observation:
   inbox: list
   meetings: list
   time: string
   done: boolean
-  reward: float
+
+state:
+  step_count: int
+  completed_tasks: int

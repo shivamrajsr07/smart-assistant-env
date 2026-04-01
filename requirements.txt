@@ -2,4 +2,5 @@ openenv-core
 fastapi
 uvicorn
 pydantic
+openai
 requests
