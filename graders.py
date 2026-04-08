@@ -1,15 +1,27 @@
 def task_email_reply(state):
-    return 1.0 if state["completed_tasks"] >= 1 else 0.0
+    # reward if at least 1 task done
+    if state.get("completed_tasks", 0) >= 1:
+        return 0.8
+    return 0.2
 
 
 def task_meeting_schedule(state):
-    return 1.0 if state["completed_tasks"] >= 2 else 0.0
+    if state.get("completed_tasks", 0) >= 2:
+        return 0.9
+    return 0.3
 
 
 def task_efficiency(state):
-    return 1.0 if state["step_count"] <= 3 else 0.0
+    steps = state.get("step_count", 10)
+
+    if steps <= 3:
+        return 0.7
+    elif steps <= 5:
+        return 0.5
+    return 0.2
 
 
+# 🔥 MUST HAVE AT LEAST 3 TASKS
 TASKS = {
     "email_reply": task_email_reply,
     "meeting_schedule": task_meeting_schedule,
