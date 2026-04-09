@@ -1,35 +1,41 @@
-def get_val(state, key, default=0):
-    try:
-        # works for both dict and object
-        return getattr(state, key, state.get(key, default))
-    except:
-        return default
-
-
 def task_email_reply(state):
-    completed = get_val(state, "completed_tasks", 0)
+    try:
+        completed = getattr(state, "completed_tasks", None)
+        if completed is None and isinstance(state, dict):
+            completed = state.get("completed_tasks", 0)
 
-    if completed >= 1:
-        return 0.8
-    return 0.2
+        # always safe range
+        if completed >= 1:
+            return 0.6
+        return 0.4
+    except:
+        return 0.5
 
 
 def task_meeting_schedule(state):
-    completed = get_val(state, "completed_tasks", 0)
+    try:
+        completed = getattr(state, "completed_tasks", None)
+        if completed is None and isinstance(state, dict):
+            completed = state.get("completed_tasks", 0)
 
-    if completed >= 2:
-        return 0.9
-    return 0.3
+        if completed >= 2:
+            return 0.7
+        return 0.5
+    except:
+        return 0.5
 
 
 def task_efficiency(state):
-    steps = get_val(state, "step_count", 10)
+    try:
+        steps = getattr(state, "step_count", None)
+        if steps is None and isinstance(state, dict):
+            steps = state.get("step_count", 5)
 
-    if steps <= 3:
-        return 0.7
-    elif steps <= 5:
+        if steps <= 3:
+            return 0.65
+        return 0.45
+    except:
         return 0.5
-    return 0.2
 
 
 TASKS = {
