@@ -1,45 +1,9 @@
-name: smart-assistant-env
+env_name: smart_assistant_env
 
-action:
-  type: object
-  properties:
-    action_type:
-      type: string
-    email_id:
-      type: integer
-  required: [action_type]
+tasks:
+  - task1
+  - task2
+  - task3
 
-observation:
-  type: object
-  properties:
-    inbox:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-          priority:
-            type: string
-          requires_reply:
-            type: boolean
-    meetings:
-      type: array
-      items:
-        type: string
-    time:
-      type: string
-    done:
-      type: boolean
-    reward:
-      type: number
-  required: [inbox, meetings, time, done, reward]
-
-state:
-  type: object
-  properties:
-    step_count:
-      type: integer
-    completed_tasks:
-      type: integer
-  required: [step_count, completed_tasks]
+grader:
+  file: graders.py
