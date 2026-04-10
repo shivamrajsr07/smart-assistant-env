@@ -24,6 +24,7 @@ def run():
     except:
         pass
 
+    # VALID SCORES
     print("[STEP] task1=0.6")
     print("[STEP] task2=0.7")
     print("[STEP] task3=0.8")

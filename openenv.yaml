@@ -1,9 +1,4 @@
 env_name: smart_assistant_env
 
-tasks:
-  - task1
-  - task2
-  - task3
-
 grader:
-  file: graders
+  file: server.graders
