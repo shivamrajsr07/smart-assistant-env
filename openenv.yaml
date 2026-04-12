@@ -1,5 +1,8 @@
 env_name: smart_assistant_env
 
+env:
+  entrypoint: server.smart_assistant_env_environment:SmartAssistantEnvironment
+
 grader:
   file: server.graders
   entrypoint: TASKS
