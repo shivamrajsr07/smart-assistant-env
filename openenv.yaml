@@ -2,3 +2,4 @@ env_name: smart_assistant_env
 
 grader:
   file: server.graders
+  entrypoint: TASKS

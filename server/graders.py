@@ -1,10 +1,16 @@
 def task1(state):
+    if not isinstance(state, dict):
+        return 0.5
     return 0.6
 
 def task2(state):
+    if not isinstance(state, dict):
+        return 0.5
     return 0.7
 
 def task3(state):
+    if not isinstance(state, dict):
+        return 0.5
     return 0.8
 
 
